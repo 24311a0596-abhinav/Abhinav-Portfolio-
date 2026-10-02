@@ -18,7 +18,7 @@ export default function About() {
       </dl>
       <h3 className="text-sm font-medium text-black mt-6 mb-3">Hackathons and events</h3>
       <div className="flex flex-wrap gap-2">
-        <span className="rounded-full bg-[#1C2E1E] text-white text-xs px-3 py-1.5">4th place, IEEE Hackathon</span>
+        <span className="rounded-full bg-[#1C2E1E] text-white text-xs px-3 py-1.5">IEEE Hackathon</span>
         {EVENTS.map((e) => <span key={e} className="rounded-full bg-white/80 ring-1 ring-black/10 text-xs px-3 py-1.5 text-neutral-700">{e}</span>)}
       </div>
     </section>
