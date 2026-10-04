@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import BlinkingBackdrop from "./BlinkingBackdrop";
-const SRC = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260601_110537_3a579fa0-7bbc-4d94-9d25-0e816c7840f5.mp4";
+const SRC = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260601_110537_3a579fa0-7bbc-4d94-9d25-0e816c7840f5.mp4#t=0.1";
 
 export default function BackgroundVideo() {
   const ref = useRef<HTMLVideoElement>(null);
@@ -24,15 +24,18 @@ export default function BackgroundVideo() {
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
+    const kick = () => { if (window.innerWidth < 1024) video.play().catch(() => {}); };
     const sync = () => {
-      if (window.innerWidth < 1024) {
-        video.autoplay = true; video.loop = true;
-        video.play().catch(() => {});
-      } else { video.autoplay = false; video.loop = false; video.pause(); }
+      if (window.innerWidth < 1024) { video.autoplay = true; video.loop = true; kick(); }
+      else { video.autoplay = false; video.loop = false; video.pause(); }
     };
     sync();
     window.addEventListener("resize", sync);
-    return () => window.removeEventListener("resize", sync);
+    window.addEventListener("touchstart", kick, { passive: true });
+    return () => {
+      window.removeEventListener("resize", sync);
+      window.removeEventListener("touchstart", kick);
+    };
   }, []);
 
   return (
