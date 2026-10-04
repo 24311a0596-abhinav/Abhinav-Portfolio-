@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
+import BlinkingBackdrop from "./BlinkingBackdrop";
 const SRC = "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260601_110537_3a579fa0-7bbc-4d94-9d25-0e816c7840f5.mp4";
 
 export default function BackgroundVideo() {
   const ref = useRef<HTMLVideoElement>(null);
 
-  // Desktop: scrub with horizontal mouse movement
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
@@ -21,7 +21,6 @@ export default function BackgroundVideo() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  // Mobile/tablet: autoplay loop
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
@@ -37,8 +36,13 @@ export default function BackgroundVideo() {
   }, []);
 
   return (
-    <div className="order-last lg:order-none relative lg:fixed lg:inset-0 lg:z-0 overflow-hidden pointer-events-none w-full aspect-square md:aspect-video lg:aspect-auto lg:h-full bg-neutral-50 lg:bg-transparent">
-      <video ref={ref} src={SRC} muted playsInline preload="auto" className="w-full h-full object-cover object-right lg:object-right-bottom lg:w-[64%] lg:ml-auto lg:[mask-image:linear-gradient(to_right,transparent,black_28%)]" />
+    <div className="order-first lg:order-none relative lg:fixed lg:inset-0 lg:z-0 overflow-hidden pointer-events-none w-full h-[66svh] sm:h-[72svh] md:h-[80svh] lg:h-full bg-transparent">
+      <video
+        ref={ref} src={SRC} muted playsInline preload="auto"
+        className="w-full h-full object-cover object-[75%_center] lg:object-right-bottom lg:w-[64%] lg:ml-auto lg:[mask-image:linear-gradient(to_right,transparent,black_28%)]"
+      />
+      <BlinkingBackdrop />
+      <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white via-white/80 to-transparent lg:hidden" />
     </div>
   );
 }

@@ -14,7 +14,6 @@ function useMedia(q: string) {
 }
 
 // Where his face glow sits on a laptop screen (px), plus the radius of the area kept free of squares.
-// To make the gap smaller, lower rx and ry.
 const REF = { w: 2408, h: 1495, gx: 1610, gy: 523, rx: 215, ry: 340 };
 
 export default function BlinkingBackdrop() {
@@ -30,10 +29,8 @@ export default function BlinkingBackdrop() {
       const hr = host.current?.getBoundingClientRect(), vr = video.getBoundingClientRect();
       if (!hr || !hr.width || !vr.width) return;
       const vw = video.videoWidth || 1920, vh = video.videoHeight || 1080;
-      // the glow's position inside the video itself, taken from the reference laptop layout
       const rs = Math.max((REF.w * 0.64) / vw, REF.h / vh), rdw = vw * rs, rdh = vh * rs;
       const fx = (REF.gx - REF.w + rdw) / rdw, fy = (REF.gy - REF.h + rdh) / rdh;
-      // where the video is drawn right now
       const s = Math.max(vr.width / vw, vr.height / vh), dw = vw * s, dh = vh * s;
       const [px, py] = desktop ? [1, 1] : [0.75, 0.5];
       const gx = vr.left + (vr.width - dw) * px + fx * dw, gy = vr.top + (vr.height - dh) * py + fy * dh;
@@ -53,13 +50,10 @@ export default function BlinkingBackdrop() {
   }, [desktop]);
 
   return (
-    <div
-      ref={host}
-      aria-hidden
-      className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[66svh] sm:h-[72svh] md:h-[80svh] overflow-hidden mix-blend-darken lg:fixed lg:inset-0 lg:h-auto"
-    >
+    <div ref={host} aria-hidden className="pointer-events-none absolute inset-0 mix-blend-darken">
       <BlinkingSquares
         direction={desktop ? "right" : "top"}
+        gridSize={desktop ? 52 : 34}
         falloff={0.3}
         fadeStart={0.37}
         minBrightness={0.66}
